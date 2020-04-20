@@ -26,10 +26,13 @@ resource "aws_launch_configuration" "demo" {
   associate_public_ip_address = true
   iam_instance_profile = aws_iam_instance_profile.demo-node.name
   image_id = data.aws_ami.eks-worker.id
-  instance_type = "t2.large"
+  instance_type = "t2.medium"
   name_prefix = "terraform-eks-demo"
   security_groups = [aws_security_group.demo-node.id]
   user_data_base64 = base64encode(local.demo-node-userdata)
+  
+  # the public SSH key
+  key_name = aws_key_pair.mykeypair.key_name
 
   lifecycle {
     create_before_destroy = true
